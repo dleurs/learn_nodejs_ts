@@ -81,8 +81,7 @@ vim tsconfig.json
         "build": "tsc",
         "prestart": "npm run build",
         "start": "node ./build/main.js",
-        "dev": "nodemon src/main.ts",
-        "dev:debug": "nodemon --inspect src/main.ts"
+        "dev": "nodemon --inspect src/main.ts"
     },
 ```
 ```bash
@@ -127,7 +126,7 @@ cd ..;mkdir .vscode; cd .vscode; vim launch.json;
 ```
 
 ```bash
-npm run dev:debug
+npm run dev
 #Then, in VSCode, debug, run --> Top right corner
 #Then pick node --require ts-node
 ```

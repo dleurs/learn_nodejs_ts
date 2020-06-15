@@ -7,8 +7,7 @@
         "build": "tsc",
         "prestart": "npm run build",
         "start": "node ./build/main.js",
-        "dev": "nodemon src/main.ts",
-        "dev:debug": "nodemon --inspect src/main.ts"
+        "dev": "nodemon --inspect src/main.ts"
     },
     "author": "",
     "license": "ISC",
