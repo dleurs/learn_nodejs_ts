@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Build Project",
+            "program": "${workspaceFolder}/src/app.ts",
+            "sourceMaps": true,
+            "smartStep": true,
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceFolder}/build/*.js"
+            ],
+        }
+    ]
+}
