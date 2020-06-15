@@ -3,9 +3,8 @@
 
 ## Fast way :
 ```bash
-tar xzvf basic-ts-node.tar
-mv 10-retry-clean-setup my-app
-cd my-app;
+tar xzvf basic-node-ts.tar
+code basic-node-ts;
 npm install;
 npm run dev;
 #VSCode > Debug > Play (top left) 
@@ -13,7 +12,12 @@ npm run dev;
 
 ## Manual way :
 https://dev.to/oieduardorabelo/nodejs-with-typescript-debug-inside-vscode-and-nodemon-23o7
-
+```bash
+npm --version #6.14.4
+node --version #v12.16.3
+tsc --version #Version 3.9.5
+code --version # Visual Code Studio 1.46.0
+```
 
 ```bash
 npm init # entry point : ./src/main.ts
