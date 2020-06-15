@@ -1,1 +1,2 @@
-/nokia-graalVM/
+**/node_modules/
+**/build/

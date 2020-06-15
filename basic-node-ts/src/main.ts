@@ -2,15 +2,16 @@ import express from 'express';
 
 const app: express.Application = express();
 
-app.get('/', function (req, res)
+app.get('/', (req, res, _) => // _ = next
 {
   console.log("URL : ", req.url, "\nMETHOD : ", req.method, "\nHEADERS : ", req.headers);
   res.send('<h1>Hello World!</h1>');
 });
 
-const hostname: string = '0.0.0.0';
-const port: number = 8080;
-app.listen(port, hostname, function ()
+const hostname: string = process.env.HOST_ADDR || "0.0.0.0";
+const port: string = process.env.PORT || "8080";
+const nodeEnv: string = process.env.NODE_ENV || "development";
+app.listen(parseInt(port), hostname, function ()
 {
-  console.log(`Server running at http://${hostname}:${port}/`);
+  console.log(`Server running at http://${hostname}:${port}/ in ${nodeEnv}`);
 });
