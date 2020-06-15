@@ -141,9 +141,6 @@ chrome://inspect
 ## Dockerfile
 
 ```bash
-node --version # v12.16.3
-```
-```bash
 vim Dockerfile
 ```
 ```bash
