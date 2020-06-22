@@ -15,14 +15,13 @@ const hostname: string = process.env.HOST_ADDR || "0.0.0.0";
 const port: string = process.env.PORT || "8080";
 const nodeEnv: string = process.env.NODE_ENV || "development";
 const password: string = process.env.PASSWORD || "not set";
-const dbname: string = process.env.DBNAME || "todos";
 
 app.listen(parseInt(port), hostname, async function ()
 {
   console.log(`Server running at http://${hostname}:${port}/ in ${nodeEnv}`);
-  console.log(`Connecting to mongoDB named ${dbname} using password ${password}`);
+  console.log(`Connecting to mongoDB using password ${password}`);
   const firstTodo: Todo = new Todo({title: "Do sport"});
-  await mongoConnect();
+  await mongoConnect("todos");
   await firstTodo.save();
 });
 

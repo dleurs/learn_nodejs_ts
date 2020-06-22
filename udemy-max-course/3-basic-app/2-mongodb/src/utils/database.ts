@@ -3,11 +3,10 @@ import mongodb from 'mongodb';
 const MongoClient = mongodb.MongoClient;
 
 const password: string = process.env.PASSWORD || "not set";
-const dbname: string = process.env.DBNAME || "todos";
 
 let _db: mongodb.Db;
 
-export async function mongoConnect()
+export async function mongoConnect(dbname: string)
 {
     try
     {
