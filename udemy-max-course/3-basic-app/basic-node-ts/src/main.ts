@@ -2,15 +2,10 @@ import express from 'express';
 
 const app: express.Application = express();
 
-app.get('/', (req, res, __) =>
+app.get('/', (req, res, _) => // _ = next
 {
   console.log("URL : ", req.url, "\nMETHOD : ", req.method, "\nHEADERS : ", req.headers);
   res.send('<h1>Hello World!</h1>');
-});
-
-app.use('/', (_, res, __) =>
-{
-  res.status(404).send('<h1>404 - Page not found</h1>');
 });
 
 const hostname: string = process.env.HOST_ADDR || "0.0.0.0";

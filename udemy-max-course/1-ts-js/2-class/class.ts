@@ -21,7 +21,13 @@ class Person {
 }
 
 let dimitri: Person = new Person("Dimitri",22,true);
-console.log(dimitri.summarize()); 
+//console.log(dimitri.summarize()); 
+
+class PersonArgs {
+    name: string;
+    age: number;
+    hasHobbies?: boolean;
+}
 
 class PersonNamed {
     name: string;
@@ -45,6 +51,6 @@ class PersonNamed {
     //constructor(public name: string, public middleInitial: string, public lastName: string)
 }
 
-console.log((new PersonNamed({name: "Pauline", age: 22, hasHobbies:true}).summarize()));
+console.log((new PersonNamed({name: "Pauline", age: 22}).summarize()));
 
 
