@@ -21,9 +21,9 @@ todoRoutes.post('/todo/checking/:check/:todoId', async (req, res, __) =>
 {
     const todoId: string = req.params.todoId;
     const check: string = req.params.check; 
-    if (check != "true" &&  check != "false") {throw("check should be tru or false")}
     let todo: Todo = await Todo.get(todoId);
-    await todo.updateCheck(check);
+    todo.done = (check == "true");
+    await todo.save();
     return res.status(300).redirect('/');
 })
 

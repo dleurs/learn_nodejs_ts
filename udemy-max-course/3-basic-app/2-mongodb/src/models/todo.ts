@@ -44,15 +44,14 @@ export class Todo
     async save(): Promise<void>
     {
         const db: mongodb.Db = getDb();
-        await db.collection('todos').insertOne(this.toJson());
-    }
-
-    async updateCheck(check: string): Promise<void>
-    {
-        const db: mongodb.Db = getDb();
-        if (this._id == null) {throw("Id not set")}
-        this.done = (check == "true");
-        await db.collection('todos').findOneAndReplace({ _id: new mongodb.ObjectId(this._id)}, this.toJson());
+        let dbOperation;
+        if (this._id) {
+            dbOperation = db.collection('todos').updateOne({ _id: new mongodb.ObjectId(this._id)}, {$set: this.toJson()});
+        }
+        else {
+            dbOperation = db.collection('todos').insertOne(this.toJson());
+        }
+        await dbOperation;
     }
 
     static async get(todoId: string): Promise<Todo>
@@ -94,23 +93,23 @@ export class Todo
 
 export function showTodos(todos: Array<Todo>): string
 {
-    let str: string = "<ul>"
+    let str: string = "<table>"
     for (let todo of todos)
     {
         if (todo.done)
         {
-            str += `<li> <a style="color:#006400; font-weight: bold;" >` + todo.title + `</a>\t`;
-            str += `<form action="/todo/checking/false/` + todo._id + `" method="POST"><button type="submit">Uncheck</button></form>`;
+            str += `<tr> <td><a style="color:#006400; font-weight: bold;" >` + todo.title + `</td></a>\t`;
+            str += `<td><form action="/todo/checking/false/` + todo._id + `" method="POST"><button type="submit">Uncheck</button></form></td>`;
         } else
         {
-            str += `<li> <a>` + todo.title + `</a>\t`;
-            str += `<form action="/todo/checking/true/` + todo._id + `" method="POST"><button type="submit">Check</button></form>`;
+            str += `<tr> <td><a>` + todo.title + `</td></a>\t`;
+            str += `<td><form action="/todo/checking/true/` + todo._id + `" method="POST"><button type="submit">Check</button></form></td>`;
         }
 
-        str += `<form action="/todo/delete/` + todo._id + `" method="POST"><button type="submit">X</button></form>`;
-        str += "</li>";
+        str += `<td><form action="/todo/delete/` + todo._id + `" method="POST"><button type="submit">X</button></form></td>`;
+        str += "</tr>";
     }
-    str += "</ul>"
+    str += "</table>"
     return str;
 }
 
