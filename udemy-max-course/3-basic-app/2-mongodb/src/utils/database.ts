@@ -1,7 +1,5 @@
 import mongodb from 'mongodb';
 
-const MongoClient = mongodb.MongoClient;
-
 const dbUrl: string | undefined = process.env.DBURL;
 
 let _db: mongodb.Db;
@@ -14,7 +12,7 @@ export async function mongoConnect()
     }
     try
     {
-        let client: mongodb.MongoClient = await MongoClient.connect(dbUrl);
+        let client: mongodb.MongoClient = await mongodb.MongoClient.connect(dbUrl, {useUnifiedTopology: true});
         console.log(`Connected to mongoDB`);
         _db = client.db();
     }

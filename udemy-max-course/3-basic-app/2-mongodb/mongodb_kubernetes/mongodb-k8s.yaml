@@ -1,0 +1,155 @@
+# helm template my-release bitnami/mongodb --debug --dry-run > mongodb-k8s.yaml
+---
+# Source: mongodb/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-release-mongodb
+  namespace: default
+  labels:
+    app: mongodb
+    chart: mongodb-7.14.8
+    release: "my-release"
+    heritage: "Helm"
+secrets:
+  - name: my-release-mongodb
+---
+# Source: mongodb/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-release-mongodb
+  namespace: default
+  labels:
+    app: mongodb
+    chart: mongodb-7.14.8
+    release: "my-release"
+    heritage: "Helm"
+type: Opaque
+data:
+  mongodb-root-password: "VTR3SlptQkVMcg=="
+---
+# Source: mongodb/templates/pvc-standalone.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    app: mongodb
+    chart: mongodb-7.14.8
+    heritage: Helm
+    release: my-release
+  name: my-release-mongodb
+  namespace: default
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "8Gi"
+---
+# Source: mongodb/templates/svc-standalone.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-release-mongodb
+  namespace: default
+  labels:
+    app: mongodb
+    chart: mongodb-7.14.8
+    release: "my-release"
+    heritage: "Helm"
+spec:
+  type: ClusterIP
+  ports:
+    - name: mongodb
+      port: 27017
+      targetPort: mongodb
+  selector:
+    app: mongodb
+    release: "my-release"
+---
+# Source: mongodb/templates/deployment-standalone.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-release-mongodb
+  namespace: default
+  labels:
+    app: mongodb
+    chart: mongodb-7.14.8
+    release: "my-release"
+    heritage: "Helm"
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: mongodb
+      release: "my-release"
+  template:
+    metadata:
+      labels:
+        app: mongodb
+        release: "my-release"
+        chart: mongodb-7.14.8
+    spec:
+      serviceAccountName: my-release-mongodb
+      securityContext:
+        fsGroup: 1001      
+      initContainers:
+      containers:
+        - name: my-release-mongodb
+          image: docker.io/bitnami/mongodb:4.2.8-debian-10-r7
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-release-mongodb
+                  key: mongodb-root-password
+            - name: MONGODB_SYSTEM_LOG_VERBOSITY
+              value: "0"
+            - name: MONGODB_DISABLE_SYSTEM_LOG
+              value: "no"
+            - name: MONGODB_ENABLE_IPV6
+              value: "no"
+            - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+              value: "no"
+          ports:
+            - name: mongodb
+              containerPort: 27017
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/mongodb
+              subPath: 
+          resources:
+            {}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: my-release-mongodb
