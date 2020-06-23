@@ -13,9 +13,9 @@ app.use(todoRoutes);
 const hostname: string = process.env.HOST_ADDR || "0.0.0.0";
 const port: string = process.env.PORT || "8080";
 const nodeEnv: string = process.env.NODE_ENV || "development";
-const dbPassword: string | undefined = process.env.DBPASSWORD;
+const dbUrl: string | undefined = process.env.DBURL;
 
-if (dbPassword == (undefined || null))
+if (dbUrl == (undefined || null))
 {
   throw ("dbPassword should be set");
 }

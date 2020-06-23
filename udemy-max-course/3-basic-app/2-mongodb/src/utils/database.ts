@@ -2,20 +2,19 @@ import mongodb from 'mongodb';
 
 const MongoClient = mongodb.MongoClient;
 
-const dbPassword: string | undefined = process.env.DBPASSWORD;
-if (dbPassword == (undefined || null))
-{
-    throw ("dbPassword should be set");
-}
+const dbUrl: string | undefined = process.env.DBURL;
 
 let _db: mongodb.Db;
 
 export async function mongoConnect()
 {
+    if (dbUrl == undefined)
+    {
+        throw ("dbPassword should be set");
+    }
     try
     {
-        const dbname: string = "myProject";
-        let client: mongodb.MongoClient = await MongoClient.connect(`mongodb+srv://dimitri:${dbPassword}@testcluster-vbfgl.gcp.mongodb.net/${dbname}?retryWrites=true&w=majority`);
+        let client: mongodb.MongoClient = await MongoClient.connect(dbUrl);
         console.log(`Connected to mongoDB`);
         _db = client.db();
     }
