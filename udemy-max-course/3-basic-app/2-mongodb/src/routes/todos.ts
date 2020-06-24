@@ -5,6 +5,7 @@ export const todoRoutes = Router();
 
 todoRoutes.get('/', async (_, res, __) =>
 {
+    console.log(`Request received at "/"`);
     let todos: Array<Todo> = await Todo.getAll()
     //console.log(todos[0].toString());
     res.status(200).send(`<h1>All your todos</h1>` + showTodos(todos) + `<h1>Add a todo</h1> <form action="/todo" method="POST"><input type="text" name="title"><button type="submit">Add Todo</button></form>`);

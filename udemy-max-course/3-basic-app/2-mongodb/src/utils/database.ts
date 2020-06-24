@@ -1,6 +1,6 @@
 import mongodb from 'mongodb';
 
-const dbUrl: string | undefined = process.env.DBURL;
+const dbUrl: string = process.env.DBURL || "notSet";
 
 let _db: mongodb.Db;
 
@@ -10,16 +10,21 @@ export async function mongoConnect()
     {
         throw ("dbPassword should be set");
     }
-    try
+    let success: boolean = false
+    while (!success)
     {
-        let client: mongodb.MongoClient = await mongodb.MongoClient.connect(dbUrl, {useUnifiedTopology: true});
-        console.log(`Connected to mongoDB`);
-        _db = client.db();
-    }
-    catch (err)
-    {
-        console.log(`Error while trying to connect to mongoDB`);
-        console.log(err);
+        try
+        {
+            let client: mongodb.MongoClient = await mongodb.MongoClient.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+            console.log(`Connected to mongoDB`);
+            success = true
+            _db = client.db();
+        }
+        catch (err)
+        {
+            console.log('Error connecting to MongoDB, retrying in 1 second')
+            await new Promise(resolve => setTimeout(resolve, 1000))
+        }
     }
 }
 

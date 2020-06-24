@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nodejs-mongodb-ovh
+  name: nodejs-mongodb-ovh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-mongodb-ovh
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: nodejs-mongodb-ovh
+    spec:
+      containers:
+      - image: dleurs/nodejs-mongodb-ovh:1.1.2
+        name: nodejs-mongodb-ovh
+        ports:
+        - containerPort: 8080
+        env:
+          - name: PORT
+            value: "8080"
+          - name: DBURL
+            value: "mongodb://root:n9CabYrdK6@my-release-mongodb.default.svc.cluster.local:27017/myProject?authSource=admin"
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nodejs-mongodb-ovh
+  name: nodejs-mongodb-ovh-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+    name: http
+  selector:
+    app: nodejs-mongodb-ovh
+  type: LoadBalancer
+status:
+  loadBalancer: {}
