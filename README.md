@@ -23,7 +23,7 @@ code --version # Visual Code Studio 1.46.0
 npm init # entry point : ./src/main.ts
 ```
 ```bash
-npm add express typescript @types/express @types/node
+npm add --save express @types/express typescript @types/node body-parser 
 npm add --save-dev nodemon ts-node 
 ```
 
@@ -89,8 +89,10 @@ mkdir src; cd src; vim main.ts;
 ```
 ```bash
 import express from 'express';
+import bodyParser from 'body-parser';
 
 const app: express.Application = express();
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', (req, res, _) => // _ = next
 {
@@ -98,12 +100,12 @@ app.get('/', (req, res, _) => // _ = next
   res.send('<h1>Hello World!</h1>');
 });
 
-const hostname: string = process.env.HOST_ADDR || "0.0.0.0";
+//const hostname: string = process.env.HOST_ADDR || "0.0.0.0";
 const port: string = process.env.PORT || "8080";
 const nodeEnv: string = process.env.NODE_ENV || "development";
-app.listen(parseInt(port), hostname, function ()
+app.listen(parseInt(port), function ()
 {
-  console.log(`Server running at http://${hostname}:${port}/ in ${nodeEnv}`);
+  console.log(`Server running at http://localhost:${port}/ in ${nodeEnv}`);
 });
 ```
 ```bash
@@ -139,6 +141,8 @@ chrome://inspect
 ```
 
 ## Dockerfile
+
+If you want to host on Kubernetes, go to : https://github.com/dleurs/nodejs-tsc-mongodb-on-k8s
 
 ```bash
 vim Dockerfile
