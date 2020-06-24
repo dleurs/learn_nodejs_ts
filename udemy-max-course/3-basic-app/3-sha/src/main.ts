@@ -1,13 +1,15 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import crypto from 'crypto';
 
 const app: express.Application = express();
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.get('/', (req, res, _) => // _ = next
+app.get('/:msg', async (req, res, _) => // _ = next
 {
-  console.log("URL : ", req.url, "\nMETHOD : ", req.method, "\nHEADERS : ", req.headers);
-  res.send('<h1>Hello World!</h1>');
+  const msg: string = req.params.msg;
+  const msgMd5: string = crypto.createHash('md5').update(msg).digest("hex");
+  res.json({message: msgMd5});
 });
 
 //const hostname: string = process.env.HOST_ADDR || "0.0.0.0";
