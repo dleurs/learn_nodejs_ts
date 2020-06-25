@@ -5,7 +5,7 @@ import crypto from 'crypto';
 const app: express.Application = express();
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.get('/:msg', async (req, res, _) => // _ = next
+app.get('/:msg', (req, res, _) => // _ = next
 {
   const msg: string = req.params.msg;
   const msgMd5: string = crypto.createHash('md5').update(msg).digest("hex");
