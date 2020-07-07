@@ -1,0 +1,16 @@
+FROM node:12
+
+# ARG DOCKER_NODE_ENV="development"
+# ENV NODE_ENV=${DOCKER_NODE_ENV}
+# ARG DOCKER_HOST_ADDR="0.0.0.0"
+# ENV HOST_ADDR=${DOCKER_HOST}
+# ARG DOCKER_PORT=8080
+# ENV PORT=${DOCKER_PORT}
+
+WORKDIR /usr/src
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+EXPOSE ${DOCKER_PORT}
+CMD [ "npm", "start" ]

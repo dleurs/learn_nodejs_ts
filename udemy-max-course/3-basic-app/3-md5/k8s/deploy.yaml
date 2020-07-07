@@ -23,7 +23,7 @@ spec:
         resources: {}
 status: {}
 ---
-# Test with kubectl run --namespace default testing-nodejs-app-2 --rm --tty -i --restart='Never' --image curlimages/curl --command -- curl -v hash-md5.default.svc.cluster.local/Dimitri
+# Test with kubectl run --namespace default testing-nodejs-app-2 --rm --tty -i --restart='Never' --image curlimages/curl --command -- curl -v http://hash-md5.default.svc.cluster.local/Dimitri
 apiVersion: v1
 kind: Service
 metadata:
